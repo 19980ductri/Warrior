@@ -1,0 +1,47 @@
+﻿#pragma once
+#include "GameplayTagContainer.h"
+
+
+#include "WarriorStructTypes.generated.h"
+
+class UInputMappingContext;
+class UWarriorGameplayAbility;
+class UWarriorHeroLinkedAnimLayer;
+
+USTRUCT(BlueprintType)
+struct FWarriorAbilitySet
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= InputTag)
+	FGameplayTag InputTag;
+	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
+	bool IsValid() const;
+
+public:
+	FORCEINLINE TSubclassOf<UWarriorGameplayAbility> GetAbilityToGrant() const {return AbilityToGrant;}
+		
+};
+
+
+USTRUCT(BlueprintType)
+struct FWarriorHeroWeaponData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UWarriorHeroLinkedAnimLayer> WeaponAnimLayerToLink;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UInputMappingContext* WeaponInputMappingContext;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<FWarriorAbilitySet> DefaultWeaponAbilities;
+	
+	
+};
+
