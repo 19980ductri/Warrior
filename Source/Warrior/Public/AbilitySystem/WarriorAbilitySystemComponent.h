@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "Abilities/WarriorGameplayAbility.h"
+#include "WarriorStructTypes.h"
 #include "WarriorAbilitySystemComponent.generated.h"
 
 class UDataAsset_HeroStartupData;
 class UDataAsset_StartupDataBase;
+class UWarriorGameplayAbility;
 /**
  * 
  */
@@ -26,7 +27,10 @@ public:
 
 	void OnAbilityInputPressed(const FGameplayTag& InputTag);
 	void OnAbilityInputReleased(const FGameplayTag& InputTag);
-	
+	void GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet);
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities, int32 InLevel = 1);
 protected:
 	void GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& AbilitiesToGrant, int32 Level = 1);
 	

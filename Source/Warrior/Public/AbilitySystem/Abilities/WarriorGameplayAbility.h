@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "WarriorGameplayAbility.generated.h"
 
 
@@ -30,7 +31,7 @@ public:
 	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 
 	UFUNCTION(BlueprintPure, Category = "Ability")
-	UWarriorGameplayAbility* GetWarriorGameplayAbilityFromActorInfo() const;
+	UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponentFromActorInfo() const;
 protected:
 
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;

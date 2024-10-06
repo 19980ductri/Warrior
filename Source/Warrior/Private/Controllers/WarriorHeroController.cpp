@@ -18,7 +18,7 @@ void AWarriorHeroController::SetupInputComponent()
 	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
 	check(InputLocalPlayerSubsystem);
 
-	InputLocalPlayerSubsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext, 0);
+	InputLocalPlayerSubsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext, -1);
 	UWarriorInputComponent* WarriorInputComponent =	CastChecked<UWarriorInputComponent>(InputComponent);
 
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Move,
@@ -26,7 +26,8 @@ void AWarriorHeroController::SetupInputComponent()
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look,
 		ETriggerEvent::Triggered, this, &ThisClass::Look);
 
-	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
+	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this,
+		&ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 	
 }
 
@@ -65,9 +66,11 @@ void AWarriorHeroController::Look(const FInputActionValue& InputActionValue)
 }
 
 void AWarriorHeroController::Input_AbilityInputPressed(FGameplayTag InputTag)
-{
+{	
 	//Cast<AWarriorBaseCharacter>(GetCharacter())->GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
 	GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
+	
+	
 }
 
 void AWarriorHeroController::Input_AbilityInputReleased(FGameplayTag InputTag)

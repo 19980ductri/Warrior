@@ -52,11 +52,7 @@ void UWarriorAbilitySystemComponent::GrantStartupAbilitySets(const UDataAsset_He
 		{
 			continue;
 		}
-		FGameplayAbilitySpec AbilitySpec(AbilityData.GetAbilityToGrant());
-		AbilitySpec.SourceObject = GetAvatarActor();
-		AbilitySpec.Level = level;
-		AbilitySpec.DynamicAbilityTags.AddTag(AbilityData.InputTag);
-		GiveAbility(AbilitySpec);
+		GrantAbilityWithAbilityData(level, AbilityData);
 	}
 	
 }
@@ -65,10 +61,13 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 {
 	if (InputTag.IsValid() == true)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Input Tag: %s"), *InputTag.ToString())
 		for(const auto& AbilitySpec :	GetActivatableAbilities())
 		{
+			//UE_LOG(LogTemp, Warning, TEXT("AbilitySpec tag: %s"),*AbilitySpec.DynamicAbilityTags.ToString())
 			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"),*AbilitySpec.Ability.GetName())
 				TryActivateAbility(AbilitySpec.Handle);
 			}
 		}
@@ -78,4 +77,36 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& InputTag)
 {
 	
+}
+
+void UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet)
+{
+	FGameplayAbilitySpec Spec(AbilitySet.GetAbilityToGrant());
+	Spec.SourceObject = GetAvatarActor();
+	Spec.Level = InLevel;
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *Spec.DynamicAbilityTags.ToString());
+	Spec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);	
+	GiveAbility(Spec);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *Spec.DynamicAbilityTags.ToString());
+}
+
+void UWarriorAbilitySystemComponent::GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
+                                                          const int32 InLevel)
+{
+
+	
+	if (InDefaultWeaponAbilities.Num() <= 0 )
+	{
+		return;
+	}
+
+	
+	for (const auto& AbilitySet : InDefaultWeaponAbilities)
+	{
+		if (AbilitySet.IsValid())
+		{
+			GrantAbilityWithAbilityData(InLevel, AbilitySet);
+		}
+		
+	}
 }
