@@ -79,7 +79,8 @@ void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& 
 	
 }
 
-void UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet)
+FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(
+	int32 InLevel, const FWarriorAbilitySet& AbilitySet)
 {
 	FGameplayAbilitySpec Spec(AbilitySet.GetAbilityToGrant());
 	Spec.SourceObject = GetAvatarActor();
@@ -88,25 +89,35 @@ void UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(int32 InLevel, 
 	Spec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);	
 	GiveAbility(Spec);
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *Spec.DynamicAbilityTags.ToString());
+
+	return Spec.Handle;
 }
 
-void UWarriorAbilitySystemComponent::GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
-                                                          const int32 InLevel)
+TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAbilities(
+	const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
+	const int32 InLevel)
 {
-
-	
-	if (InDefaultWeaponAbilities.Num() <= 0 )
-	{
-		return;
-	}
-
-	
+	TArray<FGameplayAbilitySpecHandle> CachedAbilitySpec;
 	for (const auto& AbilitySet : InDefaultWeaponAbilities)
 	{
 		if (AbilitySet.IsValid())
 		{
-			GrantAbilityWithAbilityData(InLevel, AbilitySet);
+			const FGameplayAbilitySpecHandle& SpecHandle = GrantAbilityWithAbilityData(InLevel, AbilitySet);
+			CachedAbilitySpec.AddUnique(SpecHandle);
 		}
-		
 	}
+	return CachedAbilitySpec;
+}
+
+void UWarriorAbilitySystemComponent::RemoveGrantedHeroWeaponAbilities(
+	UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove)
+{
+	for (const auto& AbilitySpec : InSpecHandlesToRemove)
+	{
+		if (AbilitySpec.IsValid())
+		{
+			ClearAbility(AbilitySpec);
+		}
+	}
+	InSpecHandlesToRemove.Empty();
 }

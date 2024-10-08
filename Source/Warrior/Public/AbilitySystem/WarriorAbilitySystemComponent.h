@@ -27,10 +27,15 @@ public:
 
 	void OnAbilityInputPressed(const FGameplayTag& InputTag);
 	void OnAbilityInputReleased(const FGameplayTag& InputTag);
-	void GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet);
+	
+	FGameplayAbilitySpecHandle GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet);
 
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
-	void GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities, int32 InLevel = 1);
+	TArray<FGameplayAbilitySpecHandle> GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
+	                                                        int32 InLevel = 1);
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
+	
 protected:
 	void GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& AbilitiesToGrant, int32 Level = 1);
 	

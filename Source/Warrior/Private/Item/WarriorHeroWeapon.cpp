@@ -14,3 +14,13 @@ AWarriorHeroWeapon::AWarriorHeroWeapon()
 
 	
 }
+
+void AWarriorHeroWeapon::AssignGrantedAbilitySpecHandles(const TArray<FGameplayAbilitySpecHandle>& InSpecHandle)
+{
+	GrantedAbilitiesSpecHandles = InSpecHandle;
+}
+
+TArray<FGameplayAbilitySpecHandle> AWarriorHeroWeapon::GetGrantedAbilitySpecHandles() const
+{
+	return GrantedAbilitiesSpecHandles;
+}
