@@ -26,7 +26,7 @@ class WARRIOR_API UWarriorFunctionLibrary : public UBlueprintFunctionLibrary
 
 public:
 
-	static UWarriorAbilitySystemComponent* NativeGetWarriorASCFromActor(AActor* InActor);
+	static UWarriorAbilitySystemComponent* NativeGetWarriorAscFromActor(AActor* InActor);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void AddGameplayTagToActorIfNone(AActor* InActor,FGameplayTag InTag);

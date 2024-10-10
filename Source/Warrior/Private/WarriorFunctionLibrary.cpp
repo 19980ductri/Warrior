@@ -5,7 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 
-UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
+UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorAscFromActor(AActor* InActor)
 {
 	check(InActor);
 	
@@ -13,9 +13,9 @@ UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFrom
 	
 }
 
-void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGameplayTag InTag)
+void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, const FGameplayTag InTag)
 {
-	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
+	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorAscFromActor(InActor);
 
 	if (ASC->HasMatchingGameplayTag(InTag) == false)
 	{
@@ -23,9 +23,9 @@ void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGame
 	}
 }
 
-void UWarriorFunctionLibrary::RemoveGameplayTagIfFound(AActor* InActor, FGameplayTag InTag)
+void UWarriorFunctionLibrary::RemoveGameplayTagIfFound(AActor* InActor, const FGameplayTag InTag)
 {
-	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
+	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorAscFromActor(InActor);
 
 	if (ASC->HasMatchingGameplayTag(InTag) == true)
 	{
@@ -35,11 +35,11 @@ void UWarriorFunctionLibrary::RemoveGameplayTagIfFound(AActor* InActor, FGamepla
 
 bool UWarriorFunctionLibrary::NativeDoesActorHasTag(AActor* InActor, FGameplayTag InTag)
 {
-	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
+	const UWarriorAbilitySystemComponent* ASC = NativeGetWarriorAscFromActor(InActor);
 	return ASC->HasMatchingGameplayTag(InTag);	
 }
 
-void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag InTag,
+void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, const FGameplayTag InTag,
 	EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHasTag(InActor, InTag) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
