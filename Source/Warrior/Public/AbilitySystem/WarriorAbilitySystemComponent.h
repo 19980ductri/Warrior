@@ -21,9 +21,9 @@ class WARRIOR_API UWarriorAbilitySystemComponent : public UAbilitySystemComponen
 public:
 	UWarriorAbilitySystemComponent();
 
-	void GrantDefaultAbilities(const UDataAsset_StartupDataBase* StartUpAbilitiesData, int32 level);
+	void GrantDefaultAbilities(const UDataAsset_StartupDataBase* StartUpAbilitiesData, int32 Level);
 
-	void GrantStartupAbilitySets(const UDataAsset_HeroStartupData* HeroStartupAbilitySet, int32 level);
+	void GrantStartupAbilitySets(const TArray<FWarriorAbilitySet>& HeroStartupAbilitySet, int32 Level);
 
 	void OnAbilityInputPressed(const FGameplayTag& InputTag);
 	void OnAbilityInputReleased(const FGameplayTag& InputTag);
@@ -36,8 +36,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
 	
-protected:
 	void GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& AbilitiesToGrant, int32 Level = 1);
+protected:
 	
 	
 };

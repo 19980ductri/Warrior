@@ -32,42 +32,38 @@ void UWarriorAbilitySystemComponent::GrantAbilities(const TArray<TSubclassOf<UWa
 }
 
 void UWarriorAbilitySystemComponent::GrantDefaultAbilities(const UDataAsset_StartupDataBase* StartUpAbilitiesData,
-	int32 level)
+	int32 Level)
 {
 	GrantAbilities(StartUpAbilitiesData->GetActivateGivenAbilities(),1);
 	GrantAbilities(StartUpAbilitiesData->GetReactiveGivenAbilities(),1);
-	GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(StartUpAbilitiesData), 1);
+	
+	GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(StartUpAbilitiesData)->GetHeroStartupAbilitiesToGrant(), 1);
+	
 }
 
-void UWarriorAbilitySystemComponent::GrantStartupAbilitySets(const UDataAsset_HeroStartupData* HeroStartupAbilitySet,
-	int32 level)
+void UWarriorAbilitySystemComponent::GrantStartupAbilitySets(const TArray<FWarriorAbilitySet>& HeroStartupAbilitySet, const int32 Level)
 {
-	if (HeroStartupAbilitySet == nullptr)
-	{
-		return;
-	}
-	for	(const auto&  AbilityData: HeroStartupAbilitySet->GetHeroStartupAbilitiesToGrant())
+	for	(const FWarriorAbilitySet&  AbilityData: HeroStartupAbilitySet)
 	{
 		if (AbilityData.GetAbilityToGrant() == nullptr)
 		{
 			continue;
 		}
-		GrantAbilityWithAbilityData(level, AbilityData);
+		GrantAbilityWithAbilityData(Level, AbilityData);
 	}
-	
 }
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InputTag)
 {
 	if (InputTag.IsValid() == true)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Input Tag: %s"), *InputTag.ToString())
+		//UE_LOG(LogTemp, Warning, TEXT("Input Tag: %s"), *InputTag.ToString())
 		for(const auto& AbilitySpec :	GetActivatableAbilities())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("AbilitySpec tag: %s"),*AbilitySpec.DynamicAbilityTags.ToString())
 			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"),*AbilitySpec.Ability.GetName())
+				//UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"),*AbilitySpec.Ability.GetName())
 				TryActivateAbility(AbilitySpec.Handle);
 			}
 		}
@@ -79,23 +75,17 @@ void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& 
 	
 }
 
-FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(
-	int32 InLevel, const FWarriorAbilitySet& AbilitySet)
+FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(const int32 InLevel, const FWarriorAbilitySet& AbilitySet)
 {
 	FGameplayAbilitySpec Spec(AbilitySet.GetAbilityToGrant());
 	Spec.SourceObject = GetAvatarActor();
 	Spec.Level = InLevel;
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Spec.DynamicAbilityTags.ToString());
 	Spec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);	
 	GiveAbility(Spec);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Spec.DynamicAbilityTags.ToString());
-
 	return Spec.Handle;
 }
 
-TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAbilities(
-	const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
-	const int32 InLevel)
+TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities, const int32 InLevel)
 {
 	TArray<FGameplayAbilitySpecHandle> CachedAbilitySpec;
 	for (const auto& AbilitySet : InDefaultWeaponAbilities)
@@ -109,8 +99,7 @@ TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAb
 	return CachedAbilitySpec;
 }
 
-void UWarriorAbilitySystemComponent::RemoveGrantedHeroWeaponAbilities(
-	UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove)
+void UWarriorAbilitySystemComponent::RemoveGrantedHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove)
 {
 	for (const auto& AbilitySpec : InSpecHandlesToRemove)
 	{
