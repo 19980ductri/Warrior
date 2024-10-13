@@ -26,6 +26,13 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");	
 }
 
+
+void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	InitEnemyStartupData();
+}
+
 void AWarriorEnemyCharacter::InitEnemyStartupData()
 {
 	if (StartUpAbilityData.IsNull())
@@ -35,11 +42,13 @@ void AWarriorEnemyCharacter::InitEnemyStartupData()
 
 	const FStreamableDelegate StreamableDelegate = FStreamableDelegate::CreateLambda([this] ()
 		{
-			if (UDataAsset_EnemyStartupData* LoadedData = CastChecked<UDataAsset_EnemyStartupData>(StartUpAbilityData.Get()))
+			if (const UDataAsset_EnemyStartupData* LoadedData = CastChecked<UDataAsset_EnemyStartupData>(StartUpAbilityData.Get()))
 			{
-				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetActivateGivenAbilities(),1);
-				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetReactiveGivenAbilities(),1);
+				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
+				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetActivateGivenAbilities(), 1);
+				UE_LOG(LogTemp, Warning, TEXT("Enemy start up data loaded"));	
 				
+				//WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
 			}
 		});
 	

@@ -22,7 +22,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
 
+	virtual void PossessedBy(AController* NewController) override;
 
 	void InitEnemyStartupData();
+	
 
 };

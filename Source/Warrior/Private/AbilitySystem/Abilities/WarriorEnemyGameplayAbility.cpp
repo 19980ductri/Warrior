@@ -4,7 +4,6 @@
 #include "AbilitySystem/Abilities/WarriorEnemyGameplayAbility.h"
 
 #include "Character/WarriorEnemyCharacter.h"
-#include "Components/EnemyCombatComponent.h"
 
 
 AWarriorEnemyCharacter* UWarriorEnemyGameplayAbility::GetEnemyCharacterFromActorInfo()

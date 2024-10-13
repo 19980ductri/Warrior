@@ -14,7 +14,7 @@ UPawnCombatComponent::UPawnCombatComponent()
 }
 
 void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTag, AWarriorWeaponBase* InWeapon,
-	bool bRegisterAsEquippedWeapon)
+                                                 const bool bRegisterAsEquippedWeapon)
 {
 	if (CharacterCarriedWeapons.Contains(InWeaponTag))
 	{

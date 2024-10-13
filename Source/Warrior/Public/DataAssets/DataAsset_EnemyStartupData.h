@@ -15,8 +15,12 @@ class WARRIOR_API UDataAsset_EnemyStartupData : public UDataAsset_StartupDataBas
 {
 	GENERATED_BODY()
 
+public:
+
+	FORCEINLINE	TArray<TSubclassOf<UWarriorGameplayAbility>> GetEnemyCombatAbilities() const {return EnemyCombatAbilities;}
+	
 private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= StartupData, meta=(AllowPrivateAccess = "true"))
-	TArray<TSubclassOf<UWarriorEnemyGameplayAbility>> EnemyCombatAbilities;
+	TArray<TSubclassOf<UWarriorGameplayAbility>> EnemyCombatAbilities;
 };
