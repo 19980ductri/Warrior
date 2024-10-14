@@ -29,6 +29,7 @@ protected:
 
 	virtual void PossessedBy(AController* NewController) override;
 
+	virtual UPawnCombatComponent * GetCombatComponent() const override;
 	
 private:
 #pragma region Components

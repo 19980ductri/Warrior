@@ -16,8 +16,13 @@ class WARRIOR_API AWarriorEnemyCharacter : public AWarriorBaseCharacter
 public:
 	AWarriorEnemyCharacter();
 
+	virtual UPawnCombatComponent* GetCombatComponent() const override;
+	
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const { return EnemyCombatComponent; }
+
+
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;

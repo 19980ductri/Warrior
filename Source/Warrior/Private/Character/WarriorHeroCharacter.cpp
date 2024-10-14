@@ -61,3 +61,8 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 		}
 	}
 }
+
+UPawnCombatComponent* AWarriorHeroCharacter::GetCombatComponent() const
+{
+	return HeroCombatComponent;
+}

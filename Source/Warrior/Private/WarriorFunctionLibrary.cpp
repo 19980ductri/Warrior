@@ -4,6 +4,7 @@
 #include "WarriorFunctionLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "Interfaces/PawnCombatInterface.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorAscFromActor(AActor* InActor)
 {
@@ -44,4 +45,22 @@ void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, const FGamepl
 {
 	OutConfirmType = NativeDoesActorHasTag(InActor, InTag) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
 			
+}
+
+UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	check(InActor);
+	if (const IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor))
+	{
+		return PawnCombatInterface->GetCombatComponent();
+	}
+	return nullptr;
+}
+
+UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActorInfo(AActor* InActor,
+	EWarriorValidType& OutValidType)
+{
+	UPawnCombatComponent* PawnCombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+	OutValidType = PawnCombatComponent ? EWarriorValidType::Valid : EWarriorValidType::Invalid;
+	return PawnCombatComponent;
 }
