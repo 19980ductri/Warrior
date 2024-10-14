@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HeroCombatComponent.h"
+#include "DataAssets/DataAsset_HeroStartupData.h"
 #include "DataAssets/DataAsset_StartupDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -55,7 +56,8 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 		if (LoadedData)
 		{
 			//Grant ability
-			GetWarriorAbilitySystemComponent()->GrantDefaultAbilities(LoadedData, 1);
+			GetWarriorAbilitySystemComponent()->GrantDefaultAbilitiesData(LoadedData, 1);
+			GetWarriorAbilitySystemComponent()->GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(LoadedData)->GetHeroStartupAbilitiesToGrant(), 1);
 		}
 	}
 }

@@ -44,10 +44,8 @@ void AWarriorEnemyCharacter::InitEnemyStartupData()
 		{
 			if (const UDataAsset_EnemyStartupData* LoadedData = CastChecked<UDataAsset_EnemyStartupData>(StartUpAbilityData.Get()))
 			{
-				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
-				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetActivateGivenAbilities(), 1);
+				WarriorAbilitySystemComponent->GrantDefaultAbilitiesData(LoadedData,1);
 				UE_LOG(LogTemp, Warning, TEXT("Enemy start up data loaded"));	
-				
 				//WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
 			}
 		});

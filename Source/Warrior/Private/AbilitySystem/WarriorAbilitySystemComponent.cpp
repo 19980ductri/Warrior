@@ -31,14 +31,29 @@ void UWarriorAbilitySystemComponent::GrantAbilities(const TArray<TSubclassOf<UWa
 	}
 }
 
-void UWarriorAbilitySystemComponent::GrantDefaultAbilities(const UDataAsset_StartupDataBase* StartUpAbilitiesData,
-	int32 Level)
+void UWarriorAbilitySystemComponent::ApplyGameplayEffect(
+	const TArray<TSubclassOf<UGameplayEffect>> StartupGameplayEffect, int Level)
+{
+	if (StartupGameplayEffect.Num() <= 0) return;
+	for (const auto& EffectClass : StartupGameplayEffect)
+	{
+		if (!EffectClass) continue;
+
+		const UGameplayEffect* EffectCDO = EffectClass.GetDefaultObject();
+		FGameplayEffectContextHandle ContextHandle = MakeEffectContext();
+		ApplyGameplayEffectToSelf(EffectCDO, Level, ContextHandle);
+		
+	}
+}
+
+void UWarriorAbilitySystemComponent::GrantDefaultAbilitiesData(const UDataAsset_StartupDataBase* StartUpAbilitiesData,
+                                                           int32 Level)
 {
 	GrantAbilities(StartUpAbilitiesData->GetActivateGivenAbilities(),1);
 	GrantAbilities(StartUpAbilitiesData->GetReactiveGivenAbilities(),1);
+	ApplyGameplayEffect(StartUpAbilitiesData->GetStartupGameplayEffects(), 1);
 	
-	GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(StartUpAbilitiesData)->GetHeroStartupAbilitiesToGrant(), 1);
-	
+	//GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(StartUpAbilitiesData)->GetHeroStartupAbilitiesToGrant(), 1);
 }
 
 void UWarriorAbilitySystemComponent::GrantStartupAbilitySets(const TArray<FWarriorAbilitySet>& HeroStartupAbilitySet, const int32 Level)

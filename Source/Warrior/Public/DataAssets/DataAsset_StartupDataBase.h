@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "DataAsset_StartupDataBase.generated.h"
 
+class UGameplayEffect;
 class UWarriorAbilitySystemComponent;
 class UWarriorGameplayAbility;
 /**
@@ -22,6 +23,7 @@ public:
 
 	FORCEINLINE TArray<TSubclassOf<UWarriorGameplayAbility>> GetActivateGivenAbilities() const { return ActivateGivenAbilities; }
 	FORCEINLINE TArray<TSubclassOf<UWarriorGameplayAbility>> GetReactiveGivenAbilities() const { return ReactivateGivenAbilities; }
+	FORCEINLINE TArray<TSubclassOf<UGameplayEffect>> GetStartupGameplayEffects() const { return StartupGameplayEffects; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category= StartupData)
@@ -29,5 +31,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category= StartupData)
 	TArray<TSubclassOf<UWarriorGameplayAbility>> ReactivateGivenAbilities;
-	
-};
+
+	UPROPERTY(EditDefaultsOnly, Category= StartupData)
+	TArray<TSubclassOf<UGameplayEffect>> StartupGameplayEffects;
+};	
