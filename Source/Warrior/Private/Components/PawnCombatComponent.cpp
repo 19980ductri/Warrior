@@ -3,6 +3,7 @@
 
 #include "Components/PawnCombatComponent.h"
 
+#include "Components/BoxComponent.h"
 #include "Item/WarriorWeaponBase.h"
 
 
@@ -27,6 +28,8 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTag, AWarr
 		{
 			CurrentEquippedWeaponTag = InWeaponTag;
 		}
+		InWeapon->OnWeaponHitTarget.BindUObject(this, &ThisClass::OnHitTargetActor);
+		InWeapon->OnWeaponPulledFromTarget.BindUObject(this, &ThisClass::OnWeaponPulledFromTargetActor);
 	}
 }
 
@@ -48,3 +51,32 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCurrentEquippedWeapon()
 	}
 	return GetCarriedWeaponByTag(CurrentEquippedWeaponTag);
 }
+
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, const EToggleDamageType ToggleDamageType)
+{
+	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon)
+	{
+		const AWarriorWeaponBase* WeaponToToggle = GetCurrentEquippedWeapon();
+		check(WeaponToToggle);
+		if (bShouldEnable == true)
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		}
+		else
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			OverlappedActors.Empty();
+		}
+
+		GEngine->AddOnScreenDebugMessage(-1,1,FColor::Green, FString::Printf(TEXT("%s, %hhd"), *WeaponToToggle->GetName(), WeaponToToggle->GetWeaponCollisionBox()->GetCollisionEnabled()));
+		
+	}
+}
+
+void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+{
+}
+
+void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* HitActor)
+{
+} 

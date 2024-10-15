@@ -20,4 +20,9 @@ public:
 	AWarriorHeroWeapon* GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag);
 
 
+	virtual void OnHitTargetActor(AActor* HitActor) override;
+	virtual void OnWeaponPulledFromTargetActor(AActor* HitActor) override;
+
+protected:
+	
 };
