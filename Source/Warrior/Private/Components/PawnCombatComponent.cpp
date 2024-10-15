@@ -33,7 +33,7 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTag, AWarr
 	}
 }
 
-AWarriorWeaponBase* UPawnCombatComponent::GetCarriedWeaponByTag(FGameplayTag InWeaponTag)
+AWarriorWeaponBase* UPawnCombatComponent::GetCarriedWeaponByTag(FGameplayTag InWeaponTag) const
 {
 	if (CharacterCarriedWeapons.Contains(InWeaponTag))
 	{
@@ -43,7 +43,7 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCarriedWeaponByTag(FGameplayTag InW
 	return  nullptr;
 }
 
-AWarriorWeaponBase* UPawnCombatComponent::GetCurrentEquippedWeapon()
+AWarriorWeaponBase* UPawnCombatComponent::GetCurrentEquippedWeapon() const
 {
 	if (!CurrentEquippedWeaponTag.IsValid())
 	{
@@ -67,8 +67,6 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, const ETogg
 			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			OverlappedActors.Empty();
 		}
-
-		GEngine->AddOnScreenDebugMessage(-1,1,FColor::Green, FString::Printf(TEXT("%s, %hhd"), *WeaponToToggle->GetName(), WeaponToToggle->GetWeaponCollisionBox()->GetCollisionEnabled()));
 		
 	}
 }

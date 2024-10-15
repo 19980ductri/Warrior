@@ -27,7 +27,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Ability")
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();
-		
+
+	UFUNCTION(BlueprintPure, Category= "Ability")
+	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(const TSubclassOf<UGameplayEffect>& EffectClass, float InWeaponBaseDamage
+	                                                         ,FGameplayTag InCurrentAttackTag, int32 InUsedComboCount);
 	
 private:
 

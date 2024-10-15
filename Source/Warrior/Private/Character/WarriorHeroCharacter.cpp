@@ -30,21 +30,16 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("Follow Camera");
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-
-	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0, 500.f, 0);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>("Combat Component");
-	
 }
 
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)
@@ -52,10 +47,8 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	if (StartUpAbilityData.IsNull() == false)
 	{
-		UDataAsset_StartupDataBase* LoadedData = StartUpAbilityData.LoadSynchronous();
-		if (LoadedData)
+		if (UDataAsset_StartupDataBase* LoadedData = StartUpAbilityData.LoadSynchronous())
 		{
-			//Grant ability
 			GetWarriorAbilitySystemComponent()->GrantDefaultAbilitiesData(LoadedData, 1);
 			GetWarriorAbilitySystemComponent()->GrantStartupAbilitySets(Cast<UDataAsset_HeroStartupData>(LoadedData)->GetHeroStartupAbilitiesToGrant(), 1);
 		}

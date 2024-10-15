@@ -32,13 +32,13 @@ public:
 	void RegisterSpawnedWeapon(FGameplayTag InWeaponTag, AWarriorWeaponBase* InWeapon, bool bRegisterAsEquippedWeapon = false);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
-	AWarriorWeaponBase* GetCarriedWeaponByTag(FGameplayTag InWeaponTag);
+	AWarriorWeaponBase* GetCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Warrior|Combat")
 	FGameplayTag CurrentEquippedWeaponTag;
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
-	AWarriorWeaponBase* GetCurrentEquippedWeapon();
+	AWarriorWeaponBase* GetCurrentEquippedWeapon() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
