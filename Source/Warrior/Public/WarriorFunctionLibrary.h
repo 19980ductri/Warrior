@@ -27,6 +27,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void AddGameplayTagToActorIfNone(AActor* InActor,FGameplayTag InTag);
+
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void RemoveGameplayTagIfFound(AActor* InActor, FGameplayTag InTag);
 
