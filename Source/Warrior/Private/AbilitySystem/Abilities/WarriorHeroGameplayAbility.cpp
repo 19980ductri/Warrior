@@ -42,14 +42,9 @@ FGameplayEffectSpecHandle UWarriorHeroGameplayAbility::MakeHeroDamageEffectSpecH
 	Context.AddSourceObject(GetAvatarActorFromActorInfo());
 	Context.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
 	
-	FGameplayEffectSpecHandle EffectSpecHandle = GetWarriorAbilitySystemComponentFromActorInfo()->MakeOutgoingSpec(
-		EffectClass,
-		GetAbilityLevel(),
-		Context
-	);
-	EffectSpecHandle.Data->SetSetByCallerMagnitude(
-		WarriorGameplayTags::Shared_SetByCaller_BaseDamage,
-		InWeaponBaseDamage);
+	FGameplayEffectSpecHandle EffectSpecHandle = GetWarriorAbilitySystemComponentFromActorInfo()->MakeOutgoingSpec(EffectClass, GetAbilityLevel(),Context);
+	
+	EffectSpecHandle.Data->SetSetByCallerMagnitude(WarriorGameplayTags::Shared_SetByCaller_BaseDamage, InWeaponBaseDamage);
 
 	if (InCurrentAttackTag.IsValid())
 	{
