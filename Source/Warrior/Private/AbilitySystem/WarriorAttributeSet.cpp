@@ -47,11 +47,7 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		Debug::Print(DebugString,FColor::Green);
 		if (NewCurrentHealth == 0.f)
 		{
-			AActor* OwnerActor = GetOwningAbilitySystemComponent()->GetOwner();
-			if (OwnerActor)
-			{
-				OwnerActor->Destroy();
-			}
+		
 		}
 	}
 }
