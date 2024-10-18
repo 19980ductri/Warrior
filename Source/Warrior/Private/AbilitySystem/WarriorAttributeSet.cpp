@@ -47,3 +47,4 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		}
 	}
 }
+
