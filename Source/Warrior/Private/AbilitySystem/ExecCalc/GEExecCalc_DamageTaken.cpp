@@ -70,8 +70,8 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 	float SourceAttackPower = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetWarriorDamageCapture().AttackPowerDef, EvaluateParameters, SourceAttackPower);
 
-	Debug::Print(TEXT("-------------------------------------------------"));
-	Debug::Print(TEXT("Source attack power: "), SourceAttackPower);
+	/*Debug::Print(TEXT("-------------------------------------------------"));
+	Debug::Print(TEXT("Source attack power: "), SourceAttackPower);*/
 	
 	float BaseDamage = 0.f;
 	int32 UsedLightComboCount = 0;
@@ -82,19 +82,19 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Shared_SetByCaller_BaseDamage))
 		{
 			BaseDamage = TagMagnitude.Value;
-			Debug::Print(TEXT("BaseDamage: "), BaseDamage);
+			//Debug::Print(TEXT("BaseDamage: "), BaseDamage);
 		}
 
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Light))
 		{
 			UsedLightComboCount = TagMagnitude.Value;
-			Debug::Print(TEXT("UsedLightComboCount: "), UsedLightComboCount);
+			//Debug::Print(TEXT("UsedLightComboCount: "), UsedLightComboCount);
 		}
 
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Heavy))
 		{
 			UsedHeavyComboCount = TagMagnitude.Value;
-			Debug::Print(TEXT("UsedHeavyComboCount: "), UsedHeavyComboCount);
+			//Debug::Print(TEXT("UsedHeavyComboCount: "), UsedHeavyComboCount);
 		}
 	}
 	float TargetDefPower = 0.f;
@@ -106,20 +106,16 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 	if (UsedLightComboCount != 0)
 	{
 		const float DamageIncreasePercentLight = (UsedLightComboCount - 1) * .05f + 1.f;
-		Debug::Print(TEXT("DamgeIncreasePercentLight: "), DamageIncreasePercentLight);
 		BaseDamage *= DamageIncreasePercentLight;
 	}
 
 	if (UsedHeavyComboCount != 0)
 	{
 		const float DamageIncreasePercentHeavy = (UsedHeavyComboCount * .15f) + 1.f;
-		Debug::Print(TEXT("DamgeIncresePercentHeaved: "), DamageIncreasePercentHeavy);
 		BaseDamage *= DamageIncreasePercentHeavy;
-		
 	}
 
 	const float FinalDamageDone = BaseDamage * SourceAttackPower / TargetDefPower;
-	Debug::Print(TEXT("FinalDamageDone: "), FinalDamageDone);
 	if (FinalDamageDone > 0.f)
 	{
 		//DamageTaken += FinalDamageDone;
