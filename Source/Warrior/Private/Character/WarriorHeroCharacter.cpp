@@ -3,11 +3,11 @@
 
 #include "Warrior/Public/Character/WarriorHeroCharacter.h"
 
-#include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/HeroCombatComponent.h"
+#include "Components/UIComponents/HeroUIComponent.h"
 #include "DataAssets/DataAsset_HeroStartupData.h"
 #include "DataAssets/DataAsset_StartupDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -35,6 +35,10 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>("Combat Component");
+
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>("UI Component");
+
+	
 }
 
 void AWarriorHeroCharacter::BeginPlay()
@@ -55,7 +59,17 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 	}
 }
 
+UHeroUIComponent* AWarriorHeroCharacter::GetHeroUIComponent() const
+{
+	return HeroUIComponent;
+}
+
 UPawnCombatComponent* AWarriorHeroCharacter::GetCombatComponent() const
 {
 	return HeroCombatComponent;
+}
+
+UPawnUIComponent* AWarriorHeroCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
 }

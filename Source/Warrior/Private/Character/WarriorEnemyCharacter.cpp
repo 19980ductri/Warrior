@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Components/EnemyCombatComponent.h"
+#include "Components/UIComponents/EnemyUIComponent.h"
 #include "DataAssets/DataAsset_EnemyStartupData.h"
 #include "DataAssets/DataAsset_StartupDataBase.h"
 #include "Engine/AssetManager.h"
@@ -24,11 +25,22 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 1000.f;
 	
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");	
+	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("UI Component");	
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetCombatComponent() const
 {
 	return EnemyCombatComponent;
+}
+
+UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
+{
+	return EnemyUIComponent;
+}
+
+UEnemyUIComponent* AWarriorEnemyCharacter::GetEnemyUIComponent() const
+{
+	return EnemyUIComponent;
 }
 
 

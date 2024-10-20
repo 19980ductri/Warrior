@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "Interfaces/PawnUIInterface.h"
 #include "WarriorBaseCharacter.generated.h"
 
 
@@ -14,7 +15,7 @@ class UWarriorAttributeSet;
 class UWarriorAbilitySystemComponent;
 
 UCLASS()
-class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface
+class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
 {
 	GENERATED_BODY()
 
@@ -22,13 +23,15 @@ public:
 	// Sets default values for this character's properties
 	AWarriorBaseCharacter();
 	
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
 	virtual UPawnCombatComponent* GetCombatComponent() const override;
+	
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 protected:
 
 	virtual void PossessedBy(AController* NewController) override;
-	
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AbilitySystem, meta = (AllowPrivateAccess = "true"))
 	UWarriorAbilitySystemComponent* WarriorAbilitySystemComponent;

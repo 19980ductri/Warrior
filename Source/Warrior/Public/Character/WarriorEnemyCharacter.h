@@ -6,6 +6,7 @@
 #include "Character/WarriorBaseCharacter.h"
 #include "WarriorEnemyCharacter.generated.h"
 
+class UEnemyUIComponent;
 class UEnemyCombatComponent;
 
 UCLASS()
@@ -21,12 +22,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const { return EnemyCombatComponent; }
 
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 
+	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UEnemyUIComponent* EnemyUIComponent;
+	
 	virtual void PossessedBy(AController* NewController) override;
 
 	void InitEnemyStartupData();
