@@ -6,6 +6,7 @@
 #include "Character/WarriorBaseCharacter.h"
 #include "WarriorEnemyCharacter.generated.h"
 
+class UWidgetComponent;
 class UEnemyUIComponent;
 class UEnemyCombatComponent;
 
@@ -26,12 +27,18 @@ public:
 
 	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
 	UEnemyUIComponent* EnemyUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	UWidgetComponent* EnemyHealthWidgetComponent;
 	
+	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
 
 	void InitEnemyStartupData();

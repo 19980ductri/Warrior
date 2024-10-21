@@ -3,11 +3,13 @@
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Components/EnemyCombatComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Components/UIComponents/EnemyUIComponent.h"
 #include "DataAssets/DataAsset_EnemyStartupData.h"
 #include "DataAssets/DataAsset_StartupDataBase.h"
 #include "Engine/AssetManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "UI/Widget/WarriorWidgetBase.h"
 
 // Sets default values
 AWarriorEnemyCharacter::AWarriorEnemyCharacter()
@@ -25,7 +27,9 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 1000.f;
 	
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");	
-	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("UI Component");	
+	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("UI Component");
+	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Health Widget Component");
+	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetCombatComponent() const
@@ -43,6 +47,16 @@ UEnemyUIComponent* AWarriorEnemyCharacter::GetEnemyUIComponent() const
 	return EnemyUIComponent;
 }
 
+
+void AWarriorEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	UWarriorWidgetBase* HealthWidget = Cast<UWarriorWidgetBase>(EnemyHealthWidgetComponent->GetUserWidgetObject());
+	if (HealthWidget)
+	{
+		HealthWidget->InitEnemyCreatedWidget(this);
+	}
+}
 
 void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 {

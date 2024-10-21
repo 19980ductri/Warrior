@@ -25,6 +25,7 @@ void UWarriorWidgetBase::InitEnemyCreatedWidget(AActor* OwningEnemyActor)
 	{
 		UEnemyUIComponent* EnemyUIComponent = PawnUIInterface->GetEnemyUIComponent();
 		check(EnemyUIComponent)
+		BP_OnOwningEnemyUIComponentInitialized(EnemyUIComponent);
 	}
 	
 }
