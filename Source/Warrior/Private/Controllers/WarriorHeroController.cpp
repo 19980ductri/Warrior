@@ -28,7 +28,9 @@ void AWarriorHeroController::SetupInputComponent()
 
 	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this,
 		&ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
-	
+
+
+	HeroTeamID = FGenericTeamId(0);
 }
 
 void AWarriorHeroController::MoveCharacter(const FInputActionValue& InputActionValue)
@@ -87,4 +89,9 @@ UWarriorAbilitySystemComponent* AWarriorHeroController::GetWarriorAbilitySystemC
 		return WarriorAbilitySystemComponent;
 	}
 	return WarriorAbilitySystemComponent;
+}
+
+FGenericTeamId AWarriorHeroController::GetGenericTeamId() const
+{
+	return HeroTeamID;
 }
