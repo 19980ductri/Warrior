@@ -3,6 +3,7 @@
 
 #include "Item/WarriorWeaponBase.h"
 
+#include "WarriorFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 
 
@@ -26,12 +27,12 @@ AWarriorWeaponBase::AWarriorWeaponBase()
 void AWarriorWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	APawn* OwningPawn =	GetInstigator<APawn>();
-	check(OwningPawn);
-
+	APawn* WeaponOwningPawn =	GetInstigator<APawn>();
+	check(WeaponOwningPawn
+	);
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (OwningPawn != HitPawn)
+		if (UWarriorFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn, HitPawn))
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
@@ -41,12 +42,12 @@ void AWarriorWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlap
 void AWarriorWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	APawn* OwningPawn =	GetInstigator<APawn>();
-	check(OwningPawn);
+	APawn* WeaponOwningPawn =	GetInstigator<APawn>();
+	check(WeaponOwningPawn);
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (OwningPawn != HitPawn)
+		if (UWarriorFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn, HitPawn))
 		{
 			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
 		}

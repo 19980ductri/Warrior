@@ -35,10 +35,16 @@ public:
 	                                                        int32 InLevel = 1);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	bool TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate);
 	
 	void GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& AbilitiesToGrant, int32 Level = 1);
 
 	void ApplyGameplayEffect(TArray<TSubclassOf<UGameplayEffect>> StartupGameplayEffect, int Level);
+
+	
+	
 protected:
 	
 	
