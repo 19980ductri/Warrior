@@ -85,8 +85,10 @@ void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 	}
 	else
 	{
-		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Memory->OwningPawn->GetActorLocation(), Memory->TargetActor->GetActorLocation());
-		const FRotator TargetRot = FMath::RInterpTo(Memory->OwningPawn->GetActorRotation(), LookAtRot, DeltaSeconds, RotationInterpSpeed);
+		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Memory->OwningPawn->GetActorLocation(),
+			Memory->TargetActor->GetActorLocation());
+		const FRotator TargetRot = FMath::RInterpTo(Memory->OwningPawn->GetActorRotation(), LookAtRot,
+			DeltaSeconds, RotationInterpSpeed);
 		Memory->OwningPawn->SetActorRotation(TargetRot);
 		//UE_LOG(LogTemp, Display, TEXT("HasReachedAnglePrecision = false"));
 		
