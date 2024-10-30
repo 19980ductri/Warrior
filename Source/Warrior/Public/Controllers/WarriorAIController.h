@@ -24,7 +24,6 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess))
 	UAIPerceptionComponent* EnemyPerceptionComponent;
 	

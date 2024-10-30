@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "ScalableFloat.h"
 #include "WarriorEnumTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "WarriorFunctionLibrary.generated.h"
@@ -24,7 +25,8 @@ class WARRIOR_API UWarriorFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 
 	static UWarriorAbilitySystemComponent* NativeGetWarriorAscFromActor(AActor* InActor);
-
+	static float NativeGetAngleDifference(AActor* A, AActor* B, FVector& OutAForwardVector, FVector& OutAtoBNormalized);
+	
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void AddGameplayTagToActorIfNone(AActor* InActor,FGameplayTag InTag);
 
@@ -41,5 +43,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib")
 	static bool IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn);
+
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib", meta = (CompactNodeTitle = "Get Value at Level"))
+	static float GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel);
+
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib")
+	static FGameplayTag ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference);
+
 	
 };

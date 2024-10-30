@@ -75,7 +75,7 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Status_Strafing,"Enemy.Status.Strafing");
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Status_UnderAttack,"Enemy.Status.UnderAttack");
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Status_Unbloackable,"Enemy.Status.Unbloackable");
-
+	
 	/** Shared tags **/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_HitReact,"Shared.Ability.HitReact");
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_Death,"Shared.Ability.Death");
@@ -96,6 +96,6 @@ namespace WarriorGameplayTags
 	/** Game Data tags **/
 	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_SurvivalGameModeMap,"GameData.Level.SurvivalGameModeMap");
 	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_MainMenuMap,"GameData.Level.MainMenuMap");
-
+	
 	UE_DEFINE_GAMEPLAY_TAG(GameData_SaveGame_Slot_1,"GameData.SaveGame.Slot.1");
 }

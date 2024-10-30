@@ -6,6 +6,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorAscFromActor(AActor* InActor)
 {
@@ -13,6 +14,16 @@ UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorAscFrom
 	
 	return CastChecked<UWarriorAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
 	
+}
+
+float UWarriorFunctionLibrary::NativeGetAngleDifference(AActor* A, AActor* B, FVector& OutAForwardVector, FVector& OutAtoBNormalized )
+{
+	check(A && B);
+	OutAForwardVector = A->GetActorForwardVector();
+	OutAtoBNormalized = (B->GetActorLocation() - A->GetActorLocation()).GetSafeNormal();
+	const float DotProduct = FVector::DotProduct(OutAForwardVector, OutAtoBNormalized);
+	
+	return UKismetMathLibrary::DegAcos(DotProduct);
 }
 
 void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, const FGameplayTag InTag)
@@ -82,3 +93,32 @@ bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* Targe
 	return QueryTeamAgentInterface->GetGenericTeamId() != TargetTeamAgentInterface->GetGenericTeamId();
 	
 }
+
+float UWarriorFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
+{
+	return InScalableFloat.GetValueAtLevel(InLevel);
+}
+
+FGameplayTag UWarriorFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim,
+	float& OutAngleDifference)
+{
+	check(InAttacker);
+	check(InVictim);
+
+	
+	FVector VictimForward = FVector() ;
+	FVector VictorToAttackerNormalized = FVector();
+	
+	OutAngleDifference = NativeGetAngleDifference(InVictim, InAttacker, VictimForward, VictorToAttackerNormalized);
+
+	const FVector CrossResult = FVector::CrossProduct(VictimForward, VictorToAttackerNormalized);
+
+	//have to multiply with -1 because UE uses the lefthand rule of cross product
+	if (CrossResult.Z < 0.f)
+	{
+		OutAngleDifference *= -1.f;
+	}
+	return FGameplayTag();
+}
+
+

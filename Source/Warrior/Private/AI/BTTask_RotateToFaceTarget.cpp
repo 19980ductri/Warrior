@@ -4,6 +4,7 @@
 #include "AI/BTTask_RotateToFaceTarget.h"
 
 #include "AIController.h"
+#include "WarriorFunctionLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -97,13 +98,13 @@ void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 
 bool UBTTask_RotateToFaceTarget::HasReachedAnglePrecision(APawn* QueryPawn, AActor* TargetActor) const
 {
-	const FVector OwnerForward = QueryPawn->GetActorForwardVector();
-
-	//const FVector OwnerToTargetNormalized = (QueryPawn->GetActorLocation() - TargetActor->GetActorLocation()).GetSafeNormal();
-	const FVector OwnerToTargetNormalized = (TargetActor->GetActorLocation() - QueryPawn->GetActorLocation()).GetSafeNormal();
+	FVector OwnerForward = FVector();// = QueryPawn->GetActorForwardVector();
+	FVector OwnerToTargetNormalized = FVector();
+	/*const FVector OwnerToTargetNormalized = (TargetActor->GetActorLocation() - QueryPawn->GetActorLocation()).GetSafeNormal();
 	const float DotResult = FVector::DotProduct(OwnerForward, OwnerToTargetNormalized);
-	const float AngleDif = UKismetMathLibrary::DegAcos(DotResult);
-	//UE_LOG(LogTemp, Display, TEXT("HasReachedAnglePrecision = %f"), AngleDif);
+	const float AngleDif = UKismetMathLibrary::DegAcos(DotResult);*/
+	const float AngleDif = UWarriorFunctionLibrary::NativeGetAngleDifference(QueryPawn, TargetActor, OwnerForward, OwnerToTargetNormalized);
+	UE_LOG(LogTemp, Display, TEXT("HasReachedAnglePrecision = %f"), AngleDif);
 	return AngleDif <= AnglePrecision;
 }
 
