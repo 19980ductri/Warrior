@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 
+#include "WarriorGameplayTags.h"
 #include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
 #include "DataAssets/DataAsset_HeroStartupData.h"
 #include "DataAssets/DataAsset_StartupDataBase.h"
@@ -72,13 +73,10 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 {
 	if (InputTag.IsValid() == true)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Input Tag: %s"), *InputTag.ToString())
 		for(const auto& AbilitySpec :	GetActivatableAbilities())
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("AbilitySpec tag: %s"),*AbilitySpec.DynamicAbilityTags.ToString())
 			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 			{
-				//UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"),*AbilitySpec.Ability.GetName())
 				TryActivateAbility(AbilitySpec.Handle);
 			}
 		}
@@ -87,7 +85,17 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 
 void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& InputTag)
 {
-	
+	if (!InputTag.IsValid() || !InputTag.MatchesTag(WarriorGameplayTags::InputTag_MustBeHeld))
+	{
+		return;
+	}
+	for(const auto& AbilitySpec :	GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) && AbilitySpec.IsActive())
+		{
+			CancelAbilityHandle(AbilitySpec.Handle);
+		}
+	}
 }
 
 FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbilityData(const int32 InLevel, const FWarriorAbilitySet& AbilitySet)
