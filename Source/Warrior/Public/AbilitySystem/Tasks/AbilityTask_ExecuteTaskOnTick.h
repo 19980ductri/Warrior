@@ -26,7 +26,7 @@ public:
 	static UAbilityTask_ExecuteTaskOnTick* ExecuteTaskOnTick(UGameplayAbility* OwningAbility);
 
 	virtual void TickTask(float DeltaTime) override;
-
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilityTaskTickDelegate OnAbilityTaskTickDelegate;
 };

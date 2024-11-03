@@ -23,7 +23,9 @@ protected:
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
-
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+	void OnTargetLockTick(float DeltaTime);
+	
 	void CancelTargetLockAbility();
 	void CleanUpTargetLockAbility();	
 	
@@ -34,6 +36,8 @@ private:
 	AActor* GetNearestFromAvailableActors(const TArray<AActor*>& InAvailableActors);
 	void DrawTargetLockWidget();
 	void SetTargetLockWidgetPosition();
+	void InitTargetLockMovement();
+	void ResetTargetLockMovement();
 	
 	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
 	float BoxTraceDistance;
@@ -49,10 +53,16 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
 	TSubclassOf<UWarriorWidgetBase> TargetLockWidgetClass;
-	 
+	
+	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
+	float TargetLockInterpSpeed = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
+	float TargetLockMaxWalkSpeed = 100.f;
+	
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
-	
+
 	UPROPERTY()
 	AActor* CurrentLockedActor;
 
@@ -61,5 +71,8 @@ private:
 
 	UPROPERTY()
 	FVector2D TargetLockWidgetSize = FVector2D::ZeroVector;
+
+	UPROPERTY()
+	float	CachedDefaultMaxWalkSpeed;
 	
 };

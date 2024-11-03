@@ -2,12 +2,17 @@
 
 
 #include "AbilitySystem/Abilities/HeroAbilities/HeroGameplayAbility_TargetLock.h"
+
+#include "WarriorFunctionLibrary.h"
+#include "WarriorGameplayTags.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Blueprint/WidgetTree.h"
 #include "Character/WarriorHeroCharacter.h"
 #include "Components/SizeBox.h"
 #include "Controllers/WarriorHeroController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "UI/Widget/WarriorWidgetBase.h"
 
@@ -16,6 +21,7 @@ void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpec
                                                       const FGameplayEventData* TriggerEventData)
 {
 	TryLockOnTarget();
+	InitTargetLockMovement();
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
@@ -23,8 +29,38 @@ void UHeroGameplayAbility_TargetLock::EndAbility(const FGameplayAbilitySpecHandl
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
+	ResetTargetLockMovement();
 	CleanUpTargetLockAbility();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UHeroGameplayAbility_TargetLock::OnTargetLockTick(float DeltaTime)
+{
+	if (!CurrentLockedActor ||
+		UWarriorFunctionLibrary::NativeDoesActorHasTag(CurrentLockedActor, WarriorGameplayTags::Shared_Status_Dead) ||
+		UWarriorFunctionLibrary::NativeDoesActorHasTag(GetHeroCharacterFromActorInfo(), WarriorGameplayTags::Shared_Status_Dead))
+	{
+		CancelTargetLockAbility();
+		return;
+	}
+	SetTargetLockWidgetPosition();
+	const bool bShouldOverrideRotation =
+		!UWarriorFunctionLibrary::NativeDoesActorHasTag(GetHeroCharacterFromActorInfo(), WarriorGameplayTags::Player_Status_Rolling) &&
+			!UWarriorFunctionLibrary::NativeDoesActorHasTag(GetHeroCharacterFromActorInfo(), WarriorGameplayTags::Player_Status_Blocking);
+	if (bShouldOverrideRotation == true)
+	{
+		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(
+			GetHeroCharacterFromActorInfo()->GetActorLocation(),
+			CurrentLockedActor->GetActorLocation()
+		);
+
+		const FRotator CurrentControllerRot = GetHeroControllerFromActorInfo()->GetControlRotation();
+		const FRotator TargetRot = FMath::RInterpTo(CurrentControllerRot, LookAtRot, DeltaTime, TargetLockInterpSpeed);
+
+		GetHeroControllerFromActorInfo()->SetControlRotation(FRotator(TargetRot.Pitch, TargetRot.Yaw, 0));
+		GetHeroCharacterFromActorInfo()->SetActorRotation(FRotator(0, TargetRot.Yaw, 0));
+	}
+	
 }
 
 void UHeroGameplayAbility_TargetLock::TryLockOnTarget()
@@ -45,7 +81,7 @@ void UHeroGameplayAbility_TargetLock::TryLockOnTarget()
 	{
 		CancelTargetLockAbility();
 	}
-	DrawDebugSphere(GetWorld(), CurrentLockedActor->GetActorLocation(), 100, 20, FColor::Yellow, false, 10.f);	
+	//DrawDebugSphere(GetWorld(), CurrentLockedActor->GetActorLocation(), 100, 20, FColor::Yellow, false, 10.f);	
 }
 
 void UHeroGameplayAbility_TargetLock::GetAvailableActorsToLock()
@@ -98,6 +134,7 @@ void UHeroGameplayAbility_TargetLock::SetTargetLockWidgetPosition()
 		CancelTargetLockAbility();
 		return;
 	}
+	//Find the screen 
 	FVector2d ScreenPos;
 	UWidgetLayoutLibrary::ProjectWorldLocationToWidgetPosition(
 		GetHeroControllerFromActorInfo(),
@@ -117,10 +154,25 @@ void UHeroGameplayAbility_TargetLock::SetTargetLockWidgetPosition()
 			}	
 		});
 	}
-	//ScreenPos -= (TargetLockWidgetSize / 2.f);
+	ScreenPos -= (TargetLockWidgetSize / 2.f);
 	
 	DrawnTargetLockWidget->SetPositionInViewport(ScreenPos, false);
 	
+}
+
+void UHeroGameplayAbility_TargetLock::InitTargetLockMovement()
+{
+	CachedDefaultMaxWalkSpeed =	GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed;
+	GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = TargetLockMaxWalkSpeed;
+	
+}	
+
+void UHeroGameplayAbility_TargetLock::ResetTargetLockMovement()
+{
+	if (CachedDefaultMaxWalkSpeed > 0.f)
+	{
+		GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = CachedDefaultMaxWalkSpeed;
+	}
 }
 
 void UHeroGameplayAbility_TargetLock::CancelTargetLockAbility()
@@ -136,4 +188,7 @@ void UHeroGameplayAbility_TargetLock::CleanUpTargetLockAbility()
 	{
 		DrawnTargetLockWidget->RemoveFromParent();
 	}
+	DrawnTargetLockWidget = nullptr;
+	TargetLockWidgetSize = FVector2D::ZeroVector;
+	CachedDefaultMaxWalkSpeed = 0.f;
 }
