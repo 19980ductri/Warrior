@@ -13,13 +13,13 @@ UPawnCombatComponent* UWarriorGameplayAbility::GetPawnCombatComponentFromActorIn
 {
 	if (const AActor* AvatarActor = GetAvatarActorFromActorInfo())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GetAvatarActorFromActorInfo: %s"), *AvatarActor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("GetAvatarActorFromActorInfo: %s"), *AvatarActor->GetName());
 		return AvatarActor->FindComponentByClass<UPawnCombatComponent>();
 	}
 	else
 	{
 		// Log a warning or error if the actor is null
-		UE_LOG(LogTemp, Warning, TEXT("GetAvatarActorFromActorInfo returned nullptr in UWarriorGameplayAbility."));
+		//UE_LOG(LogTemp, Warning, TEXT("GetAvatarActorFromActorInfo returned nullptr in UWarriorGameplayAbility."));
 		return nullptr;
 	}
 }

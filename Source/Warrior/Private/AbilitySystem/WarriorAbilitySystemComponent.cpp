@@ -41,6 +41,8 @@ void UWarriorAbilitySystemComponent::ApplyGameplayEffect(
 		if (!EffectClass) continue;
 
 		const UGameplayEffect* EffectCDO = EffectClass.GetDefaultObject();
+
+		
 		FGameplayEffectContextHandle ContextHandle = MakeEffectContext();
 		ApplyGameplayEffectToSelf(EffectCDO, Level, ContextHandle);
 		
@@ -71,14 +73,32 @@ void UWarriorAbilitySystemComponent::GrantStartupAbilitySets(const TArray<FWarri
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InputTag)
 {
-	if (InputTag.IsValid() == true)
+	if (InputTag.IsValid() == false)
 	{
-		for(const auto& AbilitySpec :	GetActivatableAbilities())
+		return;
+	}
+	
+	for(const auto& AbilitySpec :	GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) == false)
+			continue;
+
+		if (InputTag.MatchesTag(WarriorGameplayTags::InputTag_Toggleable))
 		{
-			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+			if (AbilitySpec.IsActive())
 			{
+				//UE_LOG(LogTemp, Warning, TEXT("lock already active"))
+				CancelAbilityHandle(AbilitySpec.Handle);
+			}
+			else
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("lock not active"))
 				TryActivateAbility(AbilitySpec.Handle);
 			}
+		}
+		else
+		{
+			TryActivateAbility(AbilitySpec.Handle);	
 		}
 	}
 }
@@ -89,10 +109,11 @@ void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& 
 	{
 		return;
 	}
-	for(const auto& AbilitySpec :	GetActivatableAbilities())
+	for(const auto& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) && AbilitySpec.IsActive())
 		{
+			//UE_LOG(LogTemp, Warning, TEXT("cancel on release"))
 			CancelAbilityHandle(AbilitySpec.Handle);
 		}
 	}

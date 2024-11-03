@@ -71,8 +71,6 @@ void AWarriorHeroController::Input_AbilityInputPressed(FGameplayTag InputTag)
 {	
 	//Cast<AWarriorBaseCharacter>(GetCharacter())->GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
 	GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
-	
-	
 }
 
 void AWarriorHeroController::Input_AbilityInputReleased(FGameplayTag InputTag)

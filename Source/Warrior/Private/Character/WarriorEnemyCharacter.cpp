@@ -77,7 +77,6 @@ void AWarriorEnemyCharacter::InitEnemyStartupData()
 			{
 				WarriorAbilitySystemComponent->GrantDefaultAbilitiesData(LoadedData,1);
 				WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
-				UE_LOG(LogTemp, Warning, TEXT("Enemy start up data loaded"));	
 				//WarriorAbilitySystemComponent->GrantAbilities(LoadedData->GetEnemyCombatAbilities(),1);
 			}
 		});
