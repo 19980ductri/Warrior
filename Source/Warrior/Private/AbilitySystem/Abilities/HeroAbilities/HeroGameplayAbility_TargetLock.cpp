@@ -22,8 +22,8 @@ void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpec
                                                       const FGameplayEventData* TriggerEventData)
 {
 	TryLockOnTarget();
-	InitTargetLockMovement();
 	InitTargetLockMappingContext();
+	InitTargetLockMovement();
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
@@ -32,8 +32,8 @@ void UHeroGameplayAbility_TargetLock::EndAbility(const FGameplayAbilitySpecHandl
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
 	ResetTargetLockMovement();
-	CleanUpTargetLockAbility();
 	ResetTargetLockMappingContext();
+	CleanUpTargetLockAbility();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -89,6 +89,8 @@ void UHeroGameplayAbility_TargetLock::TryLockOnTarget()
 
 void UHeroGameplayAbility_TargetLock::GetAvailableActorsToLock()
 {
+	AvailableActorsToLock.Empty();
+
 	TArray<FHitResult> BoxTraceHits;
 	UKismetSystemLibrary::BoxTraceMultiForObjects(
 		GetHeroCharacterFromActorInfo(),
@@ -103,6 +105,7 @@ void UHeroGameplayAbility_TargetLock::GetAvailableActorsToLock()
 		BoxTraceHits,
 		true
 		);	
+	
 	for (const FHitResult& HitResult : BoxTraceHits)
 	{
 		if (AActor* HitActor = HitResult.GetActor())
@@ -117,6 +120,35 @@ AActor* UHeroGameplayAbility_TargetLock::GetNearestFromAvailableActors(const TAr
 {
 	float ClosestDistance = 0;
 	return UGameplayStatics::FindNearestActor(GetHeroCharacterFromActorInfo()->GetActorLocation(), InAvailableActors, ClosestDistance);
+}
+
+void UHeroGameplayAbility_TargetLock::GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft,
+	TArray<AActor*>& OutActorsOnRight)
+{
+	if (!CurrentLockedActor || AvailableActorsToLock.IsEmpty())
+	{
+		return;
+	}
+
+	const FVector PlayerLocation = GetHeroCharacterFromActorInfo()->GetActorLocation();
+	const FVector PlayerToCurrentLockedActorNormalized = (CurrentLockedActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+
+	for (AActor* AvailableActor : AvailableActorsToLock)
+	{
+		if (AvailableActor == nullptr || AvailableActor == CurrentLockedActor) continue;
+		
+		const FVector PlayerToAvailableActorNormalized = (AvailableActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+		const FVector CrossResult = FVector::CrossProduct(PlayerToCurrentLockedActorNormalized, PlayerToAvailableActorNormalized);
+
+		if (CrossResult.Z  > 0.f)
+		{
+			OutActorsOnRight.AddUnique(AvailableActor);
+		}
+		else
+		{
+			OutActorsOnLeft.AddUnique(AvailableActor);
+		}
+	}
 }
 
 void UHeroGameplayAbility_TargetLock::DrawTargetLockWidget()
@@ -181,11 +213,12 @@ void UHeroGameplayAbility_TargetLock::ResetTargetLockMovement()
 void UHeroGameplayAbility_TargetLock::InitTargetLockMappingContext()
 {
 	const ULocalPlayer* LocalPlayer = GetHeroControllerFromActorInfo()->GetLocalPlayer();
+	
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
-
 	check(Subsystem);
 	Subsystem->AddMappingContext(TargetLockMappingContext, 3);
 	
+	//UE_LOG(LogTemp, Warning, TEXT("Add target lock mapping context"))
 }
 
 void UHeroGameplayAbility_TargetLock::ResetTargetLockMappingContext()
@@ -199,6 +232,7 @@ void UHeroGameplayAbility_TargetLock::ResetTargetLockMappingContext()
 
 	check(Subsystem);
 	Subsystem->RemoveMappingContext(TargetLockMappingContext);
+	//UE_LOG(LogTemp, Warning, TEXT("Remove target lock mapping context"))
 }
 
 void UHeroGameplayAbility_TargetLock::CancelTargetLockAbility()
@@ -217,4 +251,30 @@ void UHeroGameplayAbility_TargetLock::CleanUpTargetLockAbility()
 	DrawnTargetLockWidget = nullptr;
 	TargetLockWidgetSize = FVector2D::ZeroVector;
 	CachedDefaultMaxWalkSpeed = 0.f;
+}
+
+void UHeroGameplayAbility_TargetLock::SwitchTarget(const FGameplayTag& InSwitchDirectionTag)
+{
+	
+	GetAvailableActorsToLock();
+	TArray<AActor*> LeftActors;
+	TArray<AActor*> RightActors;
+	
+	AActor* NewTargetToLock = nullptr;
+	GetAvailableActorsAroundTarget(LeftActors, RightActors);
+
+	if (InSwitchDirectionTag == WarriorGameplayTags::Player_Event_SwitchTarget_Left)
+	{
+		NewTargetToLock = GetNearestFromAvailableActors(LeftActors);
+	}
+	else if (InSwitchDirectionTag == WarriorGameplayTags::Player_Event_SwitchTarget_Right)
+	{
+		NewTargetToLock = GetNearestFromAvailableActors(RightActors);
+	}
+	
+	if (NewTargetToLock)
+	{
+		CurrentLockedActor = NewTargetToLock;
+	}
+	
 }

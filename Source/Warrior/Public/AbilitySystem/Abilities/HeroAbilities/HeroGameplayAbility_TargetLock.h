@@ -28,13 +28,18 @@ protected:
 	
 	void CancelTargetLockAbility();
 	void CleanUpTargetLockAbility();	
-	
+
+	UFUNCTION(BlueprintCallable, Category = "TargetLock")
+	void SwitchTarget(const FGameplayTag& InSwitchDirectionTag);
 private:
 
 	void TryLockOnTarget();
 	void GetAvailableActorsToLock();
 	AActor* GetNearestFromAvailableActors(const TArray<AActor*>& InAvailableActors);
+	
+	void GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft, TArray<AActor*>& OutActorsOnRight);
 	void DrawTargetLockWidget();
+	
 	void SetTargetLockWidgetPosition();
 	void InitTargetLockMovement();
 	void ResetTargetLockMovement();

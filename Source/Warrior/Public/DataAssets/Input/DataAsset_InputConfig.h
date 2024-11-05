@@ -43,7 +43,7 @@ class WARRIOR_API UDataAsset_InputConfig : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputMappingContext* DefaultMappingContext;
 

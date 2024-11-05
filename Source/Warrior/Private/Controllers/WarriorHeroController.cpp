@@ -15,6 +15,7 @@
 void AWarriorHeroController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+	
 	const ULocalPlayer* LocalPlayer = GetLocalPlayer();
 	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
 	check(InputLocalPlayerSubsystem);
@@ -23,18 +24,13 @@ void AWarriorHeroController::SetupInputComponent()
 	
 	UWarriorInputComponent* WarriorInputComponent =	CastChecked<UWarriorInputComponent>(InputComponent);
 
-	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Move,
-		ETriggerEvent::Triggered, this, &ThisClass::MoveCharacter);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this,&ThisClass::MoveCharacter);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Look,ETriggerEvent::Triggered,this,&ThisClass::Look);
+
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,ETriggerEvent::Triggered,this,&ThisClass::Input_SwitchTargetTriggered);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,ETriggerEvent::Completed,this,&ThisClass::Input_SwitchTargetCompleted);
 	
-	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look,
-		ETriggerEvent::Triggered, this, &ThisClass::Look);
-	
-	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,
-		ETriggerEvent::Triggered,this,&ThisClass::Input_SwitchTargetTriggered);
-	
-	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,
-		ETriggerEvent::Completed,this,&ThisClass::Input_SwitchTargetCompleted);
-	
+	//for input ability
 	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this,
 		&ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 
@@ -74,13 +70,17 @@ void AWarriorHeroController::Look(const FInputActionValue& InputActionValue)
 	{
 		AddPitchInput(LookDirection.Y);
 	}
+
+	
+
 }
 
 
 void AWarriorHeroController::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
 {
 	SwitchDirection = InputActionValue.Get<FVector2d>();
-	GEngine->AddOnScreenDebugMessage(1,2,FColor::Red, FString::Printf(TEXT("%f"), SwitchDirection.X));
+	//UE_LOG(LogTemp, Warning, TEXT("AWarriorHeroController::Look"));
+	//GEngine->AddOnScreenDebugMessage(1,2,FColor::Red, FString::Printf(TEXT("%f"), SwitchDirection.X));
 }
 
 void AWarriorHeroController::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
@@ -90,19 +90,16 @@ void AWarriorHeroController::Input_SwitchTargetCompleted(const FInputActionValue
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetCharacter(),
 		SwitchDirection.X > 0.f ? WarriorGameplayTags::Player_Event_SwitchTarget_Right : WarriorGameplayTags::Player_Event_SwitchTarget_Left,
 		EventData);
-
 	
 }
 
 void AWarriorHeroController::Input_AbilityInputPressed(FGameplayTag InputTag)
 {	
-	//Cast<AWarriorBaseCharacter>(GetCharacter())->GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
 	GetWarriorAbilitySystemComponent()->OnAbilityInputPressed(InputTag);
 }
 
 void AWarriorHeroController::Input_AbilityInputReleased(FGameplayTag InputTag)
 {
-	///Cast<AWarriorBaseCharacter>(GetCharacter())->GetWarriorAbilitySystemComponent()->OnAbilityInputReleased(InputTag);
 	GetWarriorAbilitySystemComponent()->OnAbilityInputReleased(InputTag);
 }
 
@@ -114,7 +111,7 @@ UWarriorAbilitySystemComponent* AWarriorHeroController::GetWarriorAbilitySystemC
 		return WarriorAbilitySystemComponent;
 	}
 	return WarriorAbilitySystemComponent;
-}
+ }
 
 FGenericTeamId AWarriorHeroController::GetGenericTeamId() const
 {

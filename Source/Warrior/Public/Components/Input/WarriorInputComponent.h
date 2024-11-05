@@ -32,6 +32,7 @@ void UWarriorInputComponent::BindNativeInputAction(const UDataAsset_InputConfig*
 	checkf(InInputConfig, TEXT("null input config"))
 	if (UInputAction* FoundAction = InInputConfig->FindNativeInputActionByTag(InputTag))
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *FoundAction->GetName())
 		BindAction(FoundAction, TriggerEvent, ContextObject, Func);
 	}
 }
@@ -49,6 +50,5 @@ void UWarriorInputComponent::BindAbilityInputAction(const UDataAsset_InputConfig
 		}
 		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Started, ContextObject, InputPressedFunc, AbilityInputActionConfig.InputTag);
 		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Completed, ContextObject, InputReleasedFunc, AbilityInputActionConfig.InputTag);
-		
 	}
 }
