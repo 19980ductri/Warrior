@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/HeroAbilities/HeroGameplayAbility_TargetLock.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "WarriorFunctionLibrary.h"
 #include "WarriorGameplayTags.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
@@ -22,6 +23,7 @@ void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpec
 {
 	TryLockOnTarget();
 	InitTargetLockMovement();
+	InitTargetLockMappingContext();
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
@@ -31,6 +33,7 @@ void UHeroGameplayAbility_TargetLock::EndAbility(const FGameplayAbilitySpecHandl
 {
 	ResetTargetLockMovement();
 	CleanUpTargetLockAbility();
+	ResetTargetLockMappingContext();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -173,6 +176,29 @@ void UHeroGameplayAbility_TargetLock::ResetTargetLockMovement()
 	{
 		GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = CachedDefaultMaxWalkSpeed;
 	}
+}
+
+void UHeroGameplayAbility_TargetLock::InitTargetLockMappingContext()
+{
+	const ULocalPlayer* LocalPlayer = GetHeroControllerFromActorInfo()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+	Subsystem->AddMappingContext(TargetLockMappingContext, 3);
+	
+}
+
+void UHeroGameplayAbility_TargetLock::ResetTargetLockMappingContext()
+{
+	if (!GetHeroControllerFromActorInfo())
+	{
+		return;
+	}
+	const ULocalPlayer* LocalPlayer = GetHeroControllerFromActorInfo()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+	Subsystem->RemoveMappingContext(TargetLockMappingContext);
 }
 
 void UHeroGameplayAbility_TargetLock::CancelTargetLockAbility()

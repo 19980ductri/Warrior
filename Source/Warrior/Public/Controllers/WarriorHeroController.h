@@ -21,18 +21,24 @@ class WARRIOR_API AWarriorHeroController : public APlayerController, public IGen
 public:
 
 	virtual void SetupInputComponent() override;
-	void Input_AbilityInputPressed(FGameplayTag InputTag);
-	void Input_AbilityInputReleased(FGameplayTag InputTag);
+
 	
 	UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent();
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
 protected:
 	
-	UFUNCTION()
+	void Input_AbilityInputPressed(FGameplayTag InputTag);
+	void Input_AbilityInputReleased(FGameplayTag InputTag);
+
 	void MoveCharacter(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 
+	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);
+	
+	void Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue);
+
+	FVector2D SwitchDirection;
 	
 private:
 	

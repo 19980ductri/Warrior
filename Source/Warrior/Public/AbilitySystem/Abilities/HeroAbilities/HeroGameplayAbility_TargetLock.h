@@ -38,6 +38,9 @@ private:
 	void SetTargetLockWidgetPosition();
 	void InitTargetLockMovement();
 	void ResetTargetLockMovement();
+
+	void InitTargetLockMappingContext();
+	void ResetTargetLockMappingContext();
 	
 	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
 	float BoxTraceDistance;
@@ -59,6 +62,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
 	float TargetLockMaxWalkSpeed = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, Category= "TargetLock")
+	UInputMappingContext* TargetLockMappingContext;
 	
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
