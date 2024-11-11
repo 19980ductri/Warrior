@@ -23,12 +23,12 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimData|References")
 	AWarriorHeroCharacter* OwningHeroCharacter;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bShouldEnterRelaxState;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	float EnterRelaxThreshold = 5.f;
 
 	float IdleElapsedTime;
-	
-	
 };

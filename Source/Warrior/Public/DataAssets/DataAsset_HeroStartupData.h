@@ -21,4 +21,4 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= StartupData, meta=(AllowPrivateAccess = "true"))
 	TArray<FWarriorAbilitySet> StartupHeroAbilitySets;
-};
+}; 
