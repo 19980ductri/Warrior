@@ -33,6 +33,7 @@ protected:
 
 	void MoveCharacter(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
+	void Jump(const	FInputActionValue& InputActionValue);
 
 	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);
 	

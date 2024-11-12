@@ -26,11 +26,12 @@ void AWarriorHeroController::SetupInputComponent()
 
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this,&ThisClass::MoveCharacter);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Look,ETriggerEvent::Triggered,this,&ThisClass::Look);
-
+    WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Jump, ETriggerEvent::Triggered, this, &ThisClass::Jump);
+    
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,ETriggerEvent::Triggered,this,&ThisClass::Input_SwitchTargetTriggered);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_SwitchTarget,ETriggerEvent::Completed,this,&ThisClass::Input_SwitchTargetCompleted);
-	
 	//for input ability
+	
 	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this,
 		&ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 
@@ -70,9 +71,13 @@ void AWarriorHeroController::Look(const FInputActionValue& InputActionValue)
 	{
 		AddPitchInput(LookDirection.Y);
 	}
-
 	
+}
 
+void AWarriorHeroController::Jump(const FInputActionValue& InputActionValue)
+{
+	GetCharacter()->Jump();
+	UE_LOG(LogTemp, Warning, TEXT("AWarriorHeroController::Jump"));
 }
 
 
