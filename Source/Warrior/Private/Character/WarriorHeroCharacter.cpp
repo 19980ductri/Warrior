@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Warrior/Public/Character/WarriorHeroCharacter.h"
+#include "Character/WarriorHeroCharacter.h"
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
@@ -37,7 +37,8 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>("Combat Component");
 
 	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>("UI Component");
-
+	TrajectoryComponent = CreateDefaultSubobject<UCharacterTrajectoryComponent>(
+		"Trajectory Component");
 	
 }
 

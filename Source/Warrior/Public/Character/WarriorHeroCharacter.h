@@ -11,6 +11,7 @@ class UHeroCombatComponent;
 class UDataAsset_InputConfig;
 class UCameraComponent;
 class USpringArmComponent;
+class UCharacterTrajectoryComponent;
 /**
  * 
  */
@@ -26,6 +27,7 @@ public:
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	virtual UHeroUIComponent* GetHeroUIComponent() const override;
 
+	
 protected:
 	virtual void BeginPlay() override;
 	//virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -55,9 +57,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = CharacterData, meta = (AllowPrivateAccess = "true"))
 	UDataAsset_InputConfig* InputConfigDataAsset;
 	*/
+	UCharacterTrajectoryComponent* TrajectoryComponent;
 public:
 	FORCEINLINE UHeroCombatComponent* GetHeroCombatComponent() const { return HeroCombatComponent; }
-
 	
 	
 };
