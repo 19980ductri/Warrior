@@ -2,7 +2,7 @@
 
 
 #include "Character/WarriorHeroCharacter.h"
-
+#include "CharacterTrajectoryComponent.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"

@@ -25,7 +25,10 @@ void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaS
 		return;
 	}
 	GroundSpeed = OwningCharacter->GetVelocity().Size2D();
+	CurrentSpeed = OwningCharacter->GetVelocity().Size();
+	
 	bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
 
 	LocomotionDirection = UKismetAnimationLibrary::CalculateDirection(OwningCharacter->GetVelocity(), OwningCharacter->GetActorRotation());
+	bIsFalling = OwningMovementComponent->IsFalling();
 }

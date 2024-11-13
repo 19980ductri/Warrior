@@ -37,8 +37,8 @@ protected:
 
 	
 private:
+	
 #pragma region Components
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 	
@@ -50,14 +50,13 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UHeroUIComponent* HeroUIComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Motion Matching", meta = (AllowPrivateAccess = "true"))
+	UCharacterTrajectoryComponent* TrajectoryComponent;
 #pragma endregion
 
-	//moved to WarriorHeroController.h
-	/*
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = CharacterData, meta = (AllowPrivateAccess = "true"))
-	UDataAsset_InputConfig* InputConfigDataAsset;
-	*/
-	UCharacterTrajectoryComponent* TrajectoryComponent;
+
+
 public:
 	FORCEINLINE UHeroCombatComponent* GetHeroCombatComponent() const { return HeroCombatComponent; }
 	
