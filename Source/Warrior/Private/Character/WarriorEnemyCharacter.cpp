@@ -30,7 +30,7 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("UI Component");
 	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Health Widget Component");
 	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
-}
+} 
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetCombatComponent() const
 {

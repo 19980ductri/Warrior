@@ -24,7 +24,7 @@ public:
 	FORCEINLINE TArray<TSubclassOf<UWarriorGameplayAbility>> GetActivateGivenAbilities() const { return ActivateGivenAbilities; }
 	FORCEINLINE TArray<TSubclassOf<UWarriorGameplayAbility>> GetReactiveGivenAbilities() const { return ReactivateGivenAbilities; }
 	FORCEINLINE TArray<TSubclassOf<UGameplayEffect>> GetStartupGameplayEffects() const { return StartupGameplayEffects; }
-
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category= StartupData)
 	TArray<TSubclassOf<UWarriorGameplayAbility>> ActivateGivenAbilities;

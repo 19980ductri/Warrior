@@ -111,7 +111,7 @@ UWarriorAbilitySystemComponent* AWarriorHeroController::GetWarriorAbilitySystemC
 		return WarriorAbilitySystemComponent;
 	}
 	return WarriorAbilitySystemComponent;
- }
+}
 
 FGenericTeamId AWarriorHeroController::GetGenericTeamId() const
 {

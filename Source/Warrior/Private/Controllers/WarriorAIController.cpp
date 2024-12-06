@@ -50,9 +50,6 @@ void AWarriorAIController::BeginPlay()
 		CrowdComponent->SetCrowdSimulationState(bEnableDetourCrowAvoidance
 			                                        ? ECrowdSimulationState::Enabled
 			                                        : ECrowdSimulationState::Disabled);
-
-		
-					
 		switch (DetourCrowdAvoidanceQuality)
 		{
 		case 1:

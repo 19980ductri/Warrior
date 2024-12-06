@@ -35,6 +35,7 @@ protected:
 
 private:
 
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Detour Crowd Avoidance Config")
 	bool bEnableDetourCrowAvoidance = true;
 

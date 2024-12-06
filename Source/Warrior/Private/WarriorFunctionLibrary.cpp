@@ -57,7 +57,6 @@ void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, const FGamepl
 	EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHasTag(InActor, InTag) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
-			
 }
 
 UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
