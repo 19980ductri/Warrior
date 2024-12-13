@@ -11,7 +11,7 @@ public class Warrior : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", 
 			"EnhancedInput", "GameplayTags", "GameplayTasks", "GameplayAbilities","UMG", "AIModule" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "AIModule", "AnimGraphRuntime", "MotionWarping" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "AIModule", "AnimGraphRuntime", "MotionWarping", "Niagara" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
