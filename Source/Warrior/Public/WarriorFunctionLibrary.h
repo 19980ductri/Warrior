@@ -9,6 +9,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "WarriorFunctionLibrary.generated.h"
 
+struct FGameplayEffectSpecHandle;
 class UPawnCombatComponent;
 
 
@@ -52,4 +53,7 @@ public:
     
 	UFUNCTION(Blueprintpure, Category = "Warrior|FunctionLib")
 	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
+
+	UFUNCTION(Blueprintpure, Category = "Warrior|FunctionLib")
+	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 };

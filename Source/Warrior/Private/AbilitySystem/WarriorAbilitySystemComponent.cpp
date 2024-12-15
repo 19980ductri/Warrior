@@ -80,7 +80,7 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 	
 	for(const auto& AbilitySpec :	GetActivatableAbilities())
 	{
-		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) == false)
+		if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag) == false)
 			continue;
 
 		if (InputTag.MatchesTag(WarriorGameplayTags::InputTag_Toggleable))
@@ -111,7 +111,7 @@ void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& 
 	}
 	for(const auto& AbilitySpec : GetActivatableAbilities())
 	{
-		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) && AbilitySpec.IsActive())
+		if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag) && AbilitySpec.IsActive())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("cancel on release"))
 			CancelAbilityHandle(AbilitySpec.Handle);
@@ -124,7 +124,7 @@ FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbili
 	FGameplayAbilitySpec Spec(AbilitySet.GetAbilityToGrant());
 	Spec.SourceObject = GetAvatarActor();
 	Spec.Level = InLevel;
-	Spec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);	
+	Spec.GetDynamicSpecSourceTags().AddTag(AbilitySet.InputTag);	
 	GiveAbility(Spec);
 	return Spec.Handle;
 }
