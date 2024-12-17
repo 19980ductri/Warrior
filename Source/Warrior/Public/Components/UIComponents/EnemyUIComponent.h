@@ -7,13 +7,21 @@
 #include "EnemyUIComponent.generated.h"
 
 
+class UWarriorWidgetBase;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WARRIOR_API UEnemyUIComponent : public UPawnUIComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
-	UEnemyUIComponent();
+	UFUNCTION(BlueprintCallable)
+	void RegisterEnemyDrawnWidget(UWarriorWidgetBase* InWidgetToRegister);
 
+	UFUNCTION(BlueprintCallable)
+	void RemoveEnemyDrawnWidget();
+
+private:
+	TArray<UWarriorWidgetBase*> EnemyDrawnWidgets;
+	
 };

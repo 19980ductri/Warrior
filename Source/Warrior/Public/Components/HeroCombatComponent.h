@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "PawnCombatComponent.h"
@@ -25,7 +23,6 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Hero|WeaponData")
 	float GetHeroCurrentEquipWeaponDamageAtLevel(float InLevel) const;
 	
-
 	virtual void OnHitTargetActor(AActor* HitActor) override;
 	virtual void OnWeaponPulledFromTargetActor(AActor* HitActor) override;
 

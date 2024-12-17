@@ -27,33 +27,34 @@ public:
 
 	static UWarriorAbilitySystemComponent* NativeGetWarriorAscFromActor(AActor* InActor);
 	static float NativeGetAngleDifference(AActor* A, AActor* B, FVector& OutAForwardVector, FVector& OutAtoBNormalized);
+	static bool NativeDoesActorHasTag(AActor* InActor, FGameplayTag InTag);
 	
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void AddGameplayTagToActorIfNone(AActor* InActor,FGameplayTag InTag);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib")
 	static void RemoveGameplayTagIfFound(AActor* InActor, FGameplayTag InTag);
+	
 
-	static bool NativeDoesActorHasTag(AActor* InActor, FGameplayTag InTag);
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib", meta = (DisplayName = "Does Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))
 	static void BP_DoesActorHaveTag(AActor* InActor, FGameplayTag InTag, EWarriorConfirmType& OutConfirmType);
 	
 	static UPawnCombatComponent* NativeGetPawnCombatComponentFromActor(AActor* InActor);
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLib", meta = (DisplayName = "Get Pawn Combat Component From Actor Info", ExpandEnumAsExecs = "OutValidType"))
 	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActorInfo(AActor* InActor, EWarriorValidType& OutValidType);
-
+	
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib")
 	static bool IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn);
-
+	
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib", meta = (CompactNodeTitle = "Get Value at Level"))
 	static float GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel);
-
+	
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLib")
 	static FGameplayTag ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference);
     
 	UFUNCTION(Blueprintpure, Category = "Warrior|FunctionLib")
 	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
-
+	
 	UFUNCTION(Blueprintpure, Category = "Warrior|FunctionLib")
 	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 };

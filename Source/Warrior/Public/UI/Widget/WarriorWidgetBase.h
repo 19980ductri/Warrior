@@ -26,9 +26,10 @@ protected:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnOwningEnemyUIComponentInitialized(UEnemyUIComponent* OwningEnemyUIComponent);
+	
 public:
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable,Category="Widget")
 	void InitEnemyCreatedWidget(AActor* OwningEnemyActor);
 
 	

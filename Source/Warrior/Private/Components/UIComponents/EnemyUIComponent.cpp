@@ -3,10 +3,26 @@
 
 #include "Components/UIComponents/EnemyUIComponent.h"
 
+#include "UI/Widget/WarriorWidgetBase.h"
 
-// Sets default values for this component's properties
-UEnemyUIComponent::UEnemyUIComponent()
+
+void UEnemyUIComponent::RegisterEnemyDrawnWidget(UWarriorWidgetBase* InWidgetToRegister)
 {
+	EnemyDrawnWidgets.Add(InWidgetToRegister);
 }
 
+void UEnemyUIComponent::RemoveEnemyDrawnWidget()
+{
+	if (EnemyDrawnWidgets.IsEmpty())
+	{
+		return;
+	}
 
+	for (UWarriorWidgetBase* DrawnWidget : EnemyDrawnWidgets)
+	{
+		if (DrawnWidget)
+		{
+			DrawnWidget->RemoveFromParent();
+		}		
+	}
+}
