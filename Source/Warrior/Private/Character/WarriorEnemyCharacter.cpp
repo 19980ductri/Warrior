@@ -1,7 +1,9 @@
 ﻿
 #include "Character/WarriorEnemyCharacter.h"
 
+#include "WarriorFunctionLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/EnemyCombatComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/UIComponents/EnemyUIComponent.h"
@@ -30,6 +32,16 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("UI Component");
 	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Health Widget Component");
 	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
+
+	LeftHandBoxComponent = CreateDefaultSubobject<UBoxComponent>("Left Hand box Component");
+	LeftHandBoxComponent->SetupAttachment(GetMesh());
+	LeftHandBoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LeftHandBoxComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnBodyCollisionBoxBeginOverlap);
+
+	RightHandBoxComponent = CreateDefaultSubobject<UBoxComponent>("Right Hand box Component");
+	RightHandBoxComponent->SetupAttachment(GetMesh());
+	RightHandBoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightHandBoxComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnBodyCollisionBoxBeginOverlap);
 } 
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetCombatComponent() const
@@ -45,6 +57,19 @@ UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
 UEnemyUIComponent* AWarriorEnemyCharacter::GetEnemyUIComponent() const
 {
 	return EnemyUIComponent;
+}
+
+void AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	APawn* HitPawn = Cast<APawn>(OtherActor);
+	if (HitPawn != nullptr)
+	{
+		if (UWarriorFunctionLibrary::IsTargetPawnHostile(this, HitPawn))
+		{
+			EnemyCombatComponent->OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 
@@ -86,4 +111,18 @@ void AWarriorEnemyCharacter::InitEnemyStartupData()
 	
 }
 
+#if WITH_EDITOR
+void AWarriorEnemyCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, LeftHandCollsionBoxAttachBoneName))
+	{
+		LeftHandBoxComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftHandCollsionBoxAttachBoneName);
+	}
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, RightHandCollsionBoxAttachBoneName))
+	{
+		RightHandBoxComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightHandCollsionBoxAttachBoneName);
+	}
+}
+#endif
 

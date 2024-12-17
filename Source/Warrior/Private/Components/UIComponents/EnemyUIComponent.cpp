@@ -25,4 +25,5 @@ void UEnemyUIComponent::RemoveEnemyDrawnWidget()
 			DrawnWidget->RemoveFromParent();
 		}		
 	}
+	EnemyDrawnWidgets.Empty();
 }
