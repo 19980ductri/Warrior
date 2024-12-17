@@ -17,15 +17,17 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	bool bIsValidBlock = false;
 	
 	const bool bIsPlayerBlocking = UWarriorFunctionLibrary::NativeDoesActorHasTag(HitActor, WarriorGameplayTags::Player_Status_Blocking);
-	const bool bIsMyAttackUnBlockable = false;
+	const bool bIsMyAttackUnBlockable = UWarriorFunctionLibrary::NativeDoesActorHasTag(GetOwningPawn(), WarriorGameplayTags::Enemy_Status_Unbloackable);
 
 	if (bIsPlayerBlocking && bIsMyAttackUnBlockable == false)
 	{
 		bIsValidBlock = UWarriorFunctionLibrary::IsValidBlock(GetOwningPawn(), HitActor);
 	}
+	
 	FGameplayEventData EventData;
 	EventData.Instigator = GetOwningPawn();
 	EventData.Target = HitActor;
+	
 	if (bIsValidBlock)
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, WarriorGameplayTags::Player_Event_SuccessfulBlock, EventData);
