@@ -20,7 +20,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveEnemyDrawnWidget();
-
+	
 private:
 	TArray<UWarriorWidgetBase*> EnemyDrawnWidgets;
 	
