@@ -27,7 +27,7 @@ void UBTService_OrientToTargetActor::InitializeFromAsset(UBehaviorTree& Asset)
 {
 	Super::InitializeFromAsset(Asset);
 
-	if (UBlackboardData* BBAsset = GetBlackboardAsset())
+	if (const UBlackboardData* BBAsset = GetBlackboardAsset())
 	{
 		InTargetActorKey.ResolveSelectedKey(*BBAsset);
 	}
@@ -44,7 +44,7 @@ void UBTService_OrientToTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp,
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	UObject* ActorObject = OwnerComp.GetBlackboardComponent()->GetValueAsObject(InTargetActorKey.SelectedKeyName);
-	AActor* TargetActor = Cast<AActor>(ActorObject);
+	const AActor* TargetActor = Cast<AActor>(ActorObject);
 
 	APawn* OwningPawn =	OwnerComp.GetAIOwner()->GetPawn();
 
@@ -54,7 +54,6 @@ void UBTService_OrientToTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp,
 		const FRotator TargetRot = FMath::RInterpTo(OwningPawn->GetActorRotation(), LookAtRotation, DeltaSeconds, RotationInterpSpeed);
 		OwningPawn->SetActorRotation(TargetRot);
 	}
-	
 }
 
 

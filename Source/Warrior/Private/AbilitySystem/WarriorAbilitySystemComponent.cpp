@@ -83,22 +83,14 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 		if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag) == false)
 			continue;
 
-		if (InputTag.MatchesTag(WarriorGameplayTags::InputTag_Toggleable))
+
+		if (InputTag.MatchesTag(WarriorGameplayTags::InputTag_Toggleable) && AbilitySpec.IsActive())
 		{
-			if (AbilitySpec.IsActive())
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("lock already active"))
-				CancelAbilityHandle(AbilitySpec.Handle);
-			}
-			else
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("lock not active"))
-				TryActivateAbility(AbilitySpec.Handle);
-			}
+			CancelAbilityHandle(AbilitySpec.Handle);
 		}
 		else
 		{
-			TryActivateAbility(AbilitySpec.Handle);	
+			TryActivateAbility(AbilitySpec.Handle);
 		}
 	}
 }
