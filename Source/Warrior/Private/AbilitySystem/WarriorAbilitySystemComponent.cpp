@@ -121,10 +121,19 @@ FGameplayAbilitySpecHandle UWarriorAbilitySystemComponent::GrantAbilityWithAbili
 	return Spec.Handle;
 }
 
-TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities, const int32 InLevel)
+TArray<FGameplayAbilitySpecHandle> UWarriorAbilitySystemComponent::GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
+	const TArray<FSpecialHeroAbilitySet>& InWeaponAbilities ,const int32 InLevel)
 {
 	TArray<FGameplayAbilitySpecHandle> CachedAbilitySpec;
 	for (const auto& AbilitySet : InDefaultWeaponAbilities)
+	{
+		if (AbilitySet.IsValid())
+		{
+			const FGameplayAbilitySpecHandle& SpecHandle = GrantAbilityWithAbilityData(InLevel, AbilitySet);
+			CachedAbilitySpec.AddUnique(SpecHandle);
+		}
+	}
+	for (const auto& AbilitySet : InWeaponAbilities)
 	{
 		if (AbilitySet.IsValid())
 		{

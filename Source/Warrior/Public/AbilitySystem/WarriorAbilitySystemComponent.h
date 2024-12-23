@@ -31,8 +31,9 @@ public:
 	FGameplayAbilitySpecHandle GrantAbilityWithAbilityData(int32 InLevel, const FWarriorAbilitySet& AbilitySet);
 
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
-	TArray<FGameplayAbilitySpecHandle> GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities,
-	                                                        int32 InLevel = 1);
+	TArray<FGameplayAbilitySpecHandle> GrandWeaponAbilities(const TArray<FWarriorAbilitySet>& InDefaultWeaponAbilities, const TArray<FSpecialHeroAbilitySet>& InWeaponAbilities, int32
+	                                                        InLevel = 1);
+	
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref)TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
 
