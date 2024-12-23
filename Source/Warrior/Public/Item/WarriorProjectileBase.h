@@ -34,7 +34,7 @@ protected:
 	EProjectileDamagePolicy ProjectileDamagePolicy = EProjectileDamagePolicy::OnHit;
 
 	
-	UPROPERTY(BlueprintReadOnly, Category= "Projectile", meta = (ExposeOnSpawn = "true"))
+	UPROPERTY( BlueprintReadOnly, Category= "Projectile", meta = (ExposeOnSpawn = "true"))
 	FGameplayEffectSpecHandle ProjectileDamageEffectSpecHandle;
 	
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Spawn Projectile Hit FX"))
@@ -51,7 +51,7 @@ private:
 
 	void HandpleApplyProjectileDamage(APawn* InHitPawn, const FGameplayEventData& InPayload);
 
-	
+	TArray<AActor*> OverlappedActors;
 
 	
 
