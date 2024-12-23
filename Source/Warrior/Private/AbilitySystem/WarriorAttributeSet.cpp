@@ -22,17 +22,6 @@ UWarriorAttributeSet::UWarriorAttributeSet()
 void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-
-	/*
-	if (!CachedPawnUIInterface.IsValid())
-	{
-		//CachedPawnUIInterface = TWeakInterfacePtr<IPawnUIInterface>(Data.Target.GetAvatarActor());
-		CachedPawnUIInterface = Cast<IPawnUIInterface>(	Data.Target.GetAvatarActor());
-	}
-	check(CachedPawnUIInterface.IsValid());
-	const UPawnUIComponent* PawnUIComponent = CachedPawnUIInterface->GetPawnUIComponent();
-	*/
-
 	if (!CachedPawnUIInterface.IsValid())
 	{
 		// Use TWeakInterfacePtr if Data.Target.GetAvatarActor() implements IPawnUIInterface
@@ -51,8 +40,6 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		UE_LOG(LogTemp, Error, TEXT("PawnUIComponent is null! Make sure the avatar has a valid UI component."));
 		return;
 	}
-
-
 	
 	if (Data.EvaluatedData.Attribute == GetCurrentHealthAttribute())
 	{
@@ -65,6 +52,21 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 	{
 		const float NewCurrentRage = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
 		SetCurrentRage(NewCurrentRage);
+
+		if (GetCurrentRage() >= GetMaxRage())
+		{
+			UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), WarriorGameplayTags::Player_Status_Rage_Full);
+		}
+		else if (GetCurrentRage() <= 0.f)
+		{
+			UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), WarriorGameplayTags::Player_Status_Rage_None);
+		}
+		else
+		{
+			UWarriorFunctionLibrary::RemoveGameplayTagIfFound(Data.Target.GetAvatarActor(), WarriorGameplayTags::Player_Status_Rage_Full);
+			UWarriorFunctionLibrary::RemoveGameplayTagIfFound(Data.Target.GetAvatarActor(), WarriorGameplayTags::Player_Status_Rage_None);
+		}
+		
 		const UHeroUIComponent* HeroUIComponent = CachedPawnUIInterface->GetHeroUIComponent();
 		HeroUIComponent->OnCurrentRangeChanged.Broadcast(GetCurrentRage()/GetMaxRage());
 	}

@@ -44,7 +44,7 @@ protected:
 
 	FActiveGameplayEffectHandle NativeApplyEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 
-	UFUNCTION(BlueprintCallable, Category = "Ability", meta = ( DisplayName = "Apply Effect Spec Handle To Target" ,ExpandEnumAsExecs = "OutSuccessType"))
+	UFUNCTION(BlueprintCallable, Category = "Ability", meta = (DisplayName = "Apply Effect Spec Handle To Target" ,ExpandEnumAsExecs = "OutSuccessType"))
 	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle, EWarriorSuccessType& OutSuccessType);
 	
 private:
