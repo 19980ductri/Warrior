@@ -8,7 +8,7 @@ void FWarriorCountDownAction::UpdateOperation(FLatentResponse& Response)
 {
 	if (bNeedToCancel == true)
 	{
-		CountdownOutput = EWarriorCountdownActionOutput::Cancelled;
+		CountdownOutput = EWarriorCountdownActionOutput::Canceled;
 		Response.FinishAndTriggerIf(true, ExecutionFunction,OutputLink, CallbackTarget);
 		return;
 	}

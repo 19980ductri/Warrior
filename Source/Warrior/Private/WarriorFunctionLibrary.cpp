@@ -183,7 +183,7 @@ void UWarriorFunctionLibrary::Countdown(UObject* WorldContextObject, float Total
 				OutRemainingTime, CountdownOutput, LatentInfo));
 		}
 	}
-	if (CountdownInput == EWarriorCountdownActionInput::Cancle)
+	if (CountdownInput == EWarriorCountdownActionInput::Cancel)
 	{
 		if (FoundAction)
 		{
