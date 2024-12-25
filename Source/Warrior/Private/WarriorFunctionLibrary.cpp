@@ -158,4 +158,10 @@ bool UWarriorFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor*
 	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
 }
 
+void UWarriorFunctionLibrary::Countdown(UObject* WorldContextObject, float TotalTime, float UpdateInterval,
+	float& OutRemainingTime, EWarriorCountdownActionInput CountdownInput,
+	EWarriorCountdownActionOutput& CountdownOutput, FLatentActionInfo LatentInfo)
+{
+}
+
 
