@@ -4,6 +4,7 @@
 #include "WarriorFunctionLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GenericTeamAgentInterface.h"
+#include "WarriorCountDownAction.h"
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interfaces/PawnCombatInterface.h"
@@ -162,6 +163,33 @@ void UWarriorFunctionLibrary::Countdown(UObject* WorldContextObject, float Total
 	float& OutRemainingTime, EWarriorCountdownActionInput CountdownInput,
 	EWarriorCountdownActionOutput& CountdownOutput, FLatentActionInfo LatentInfo)
 {
+	UWorld* World = nullptr;
+	if (GEngine)
+	{
+		World =	GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	}
+	if (World ==nullptr)
+	{
+		return;
+	}
+	FLatentActionManager& LatentActionManager = World->GetLatentActionManager();
+
+	FWarriorCountDownAction* FoundAction = LatentActionManager.FindExistingAction<FWarriorCountDownAction>(LatentInfo.CallbackTarget, LatentInfo.UUID);
+	if (CountdownInput == EWarriorCountdownActionInput::Start)
+	{
+		if (!FoundAction)
+		{
+			LatentActionManager.AddNewAction(LatentInfo.CallbackTarget, LatentInfo.UUID, new FWarriorCountDownAction(TotalTime, UpdateInterval,
+				OutRemainingTime, CountdownOutput, LatentInfo));
+		}
+	}
+	if (CountdownInput == EWarriorCountdownActionInput::Cancle)
+	{
+		if (FoundAction)
+		{
+			FoundAction->CancleAction();
+		}
+	}
 }
 
 
