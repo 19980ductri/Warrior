@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintPure, Category= "Ability")
 	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage
 	                                                         ,FGameplayTag InCurrentAttackTag, int32 InUsedComboCount);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	bool GetAbilityRemainCooldownByTag(FGameplayTag InCooldownTag, float& TotalCooldownTime, float& RemainCooldownTime);
 	
 private:
 
