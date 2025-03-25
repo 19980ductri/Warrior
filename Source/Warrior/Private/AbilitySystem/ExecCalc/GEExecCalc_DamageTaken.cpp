@@ -82,19 +82,16 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Shared_SetByCaller_BaseDamage))
 		{
 			BaseDamage = TagMagnitude.Value;
-			//Debug::Print(TEXT("BaseDamage: "), BaseDamage);
 		}
 
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Light))
 		{
 			UsedLightComboCount = TagMagnitude.Value;
-			//Debug::Print(TEXT("UsedLightComboCount: "), UsedLightComboCount);
 		}
 
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Heavy))
 		{
 			UsedHeavyComboCount = TagMagnitude.Value;
-			//Debug::Print(TEXT("UsedHeavyComboCount: "), UsedHeavyComboCount);
 		}
 	}
 	float TargetDefPower = 0.f;
